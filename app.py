@@ -546,7 +546,7 @@ def run_cli_console():
 
 
 def generate_pdf_report(full_data:Dict[str,Any]) -> BytesIO:
-    """PDF报告扩充：写入全套中间实验参数，满足科研实验留存，对齐申报书附件输出"""
+    """PDF报告扩充：写入全套中间实验参数，满足科研实验留存"""
     buf = BytesIO()
     c = canvas.Canvas(buf, pagesize=A4)
     width, height = A4
@@ -605,7 +605,7 @@ def generate_pdf_report(full_data:Dict[str,Any]) -> BytesIO:
 
 # ======================== Streamlit页面开始 【美化增强｜算法完整对齐申报书附件】 ========================
 st.set_page_config(
-    page_title="真迹云鉴 · AI伪造签名快筛系统｜北京市大创中期答辩",
+    page_title="真迹云鉴 · AI伪造签名快筛系统",
     page_icon="✍️",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -691,7 +691,7 @@ tab_detect, tab_teach = st.tabs(["🧪 签名检测模块（实操检测）","�
 
 # --------------------------- 模块一：签名检测模块【完整算法输出｜全部中间实验指标展示】 ---------------------------
 with tab_detect:
-    st.markdown('<h3>AI伪造签名筛查工具（申报书附件原版算法，完整输出全部实验中间参数）</h3>',unsafe_allow_html=True)
+    st.markdown('<h3>AI伪造签名筛查工具</h3>',unsafe_allow_html=True)
 
     col_info = st.container(border=True)
 with col_info:
@@ -703,7 +703,7 @@ with col_info:
 <span style='background:#164b96;color:white;padding:2px 8px;border-radius:8px;font-size:0.8rem;'>异常部件发生率 20%</span>
 """
     st.markdown(feature_weight_html, unsafe_allow_html=True)
-    st.info("💡演示建议：本系统算法与申报书附件源码完全对齐，输出全套中间观测实验参数；准备两份样本，一份SDT模型生成AI伪造签名、一份真人手写签名，上传对比全部指标差异。")
+    st.info("💡注意：")
     uploaded_file = st.file_uploader(
         "📤 上传签名图片，优先白底黑字签名，支持JPG / PNG格式",
         type=["jpg","jpeg","png"]
@@ -722,7 +722,7 @@ with col_info:
             model_out = pipeline_result["model"]
             binary = pipeline_result["binary_img"]
 
-        st.success("✅算法计算完成，展示算法全流程中间输出产物（与申报书附件算法完全对齐）")
+        st.success("✅算法计算完成，展示算法全流程中间输出产物")
 
         col_img1, col_img2, col_img3 = st.columns(3)
         with col_img1:
@@ -762,7 +762,7 @@ with col_info:
         # =====【完整全套实验参数，分三大模块展示，答辩体现算法专业性】=====
         feat_container = st.container(border=True)
         with feat_container:
-            st.subheader("📊全套量化实验参数（申报书附件原版全部输出）")
+            st.subheader("📊全套量化实验参数")
             tab_stroke, tab_bezier, tab_speed = st.tabs(["①笔画粗细模块(K3M)","②贝塞尔残差模块","③书写速度等效熵模块"])
             with tab_stroke:
                 sr = stroke_result
@@ -833,7 +833,7 @@ with col_info:
         st.download_button("📄下载完整PDF实验筛查报告（含全部中间参数）",data=pdf_bytes,file_name="真迹云鉴_完整实验报告.pdf",mime="application/pdf")
 
     else:
-        st.info("👆请上传一张签名图片，开始AI伪造电子签名筛查。中期答辩可准备AI、真人两组样本对比演示，全部输出与申报书附件源码对齐。")
+        st.info("👆请上传一张签名图片，开始AI伪造电子签名筛查。")
 
 
 # --------------------------- 模块二：高校教学教具演示模块【美化增强】 ---------------------------
