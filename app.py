@@ -902,7 +902,7 @@ with tab_teach:
     with tab_tech:
         box3 = st.container(border=True)
         with box3:
-            st.subheader("项目完整核心技术体系三大部分（申报书附件源码实现）")
+            st.subheader("项目完整核心技术体系三大部分")
             tech_tab1,tech_tab2,tech_tab3,tech_tab4 = st.tabs(["1.双源笔迹数据库构建","2.K3M骨架提取算法","3.四大量化特征详解","4.多特征融合加权判别模型"])
             with tech_tab1:
                 st.markdown("""
@@ -991,7 +991,7 @@ $X_4$：异常部件发生率（预留）
     with tab_business:
         box5 = st.container(border=True)
         with box5:
-            st.subheader("💼项目商业模式（商业计划书内容）")
+            st.subheader("💼项目商业模式")
             st.markdown("""
 ### 四大目标客群以及对应服务模式
 1. **中小企业**：网页/小程序批量筛查，基础免费+订阅付费，解决合同签名风控；
@@ -1010,7 +1010,7 @@ $X_4$：异常部件发生率（预留）
     with tab_achievement:
         box6 = st.container(border=True)
         with box6:
-            st.subheader("🏆项目现阶段落地成果（市创中期答辩成果）")
+            st.subheader("🏆项目现阶段落地成果")
             st.divider()
             st.subheader("📜项目主体资质证明")
             st.markdown("""
