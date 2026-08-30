@@ -3,3 +3,6 @@ opencv-python-headless
 pillow
 numpy
 plotly
+scipy
+scikit-image
+reportlab
