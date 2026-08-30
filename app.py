@@ -27,8 +27,8 @@ META = {
     "project_no": "【待教务处填写项目登记号】",
     "leader": "郭卓濠（刑事司法学院 2024级）",
     "tutor": "宁势强",
-    "period": "2026.03‑2027.03",
-    "version": "V2.2‑MID‑DEFENSE 中期答辩工程版本",
+    "period": "2026.03-2027.03",
+    "version": "V2.2-MID-DEFENSE 中期答辩工程版本",
     "fund": "申请经费：8000元",
     "disclaimer": "⚠本系统为北京市大学生创新训练项目科研教学演示原型，不具备司法鉴定法律效力，不可直接作为司法证据使用。"
 }
@@ -149,8 +149,8 @@ class K3MSkeletonExtractor:
     def _repair_breakpoints(self, skeleton: np.ndarray) -> np.ndarray:
         h, w = skeleton.shape
         repaired = skeleton.copy()
-        for y in range(1, h‑1):
-            for x in range(1, w‑1):
+        for y in range(1, h-1):
+            for x in range(1, w-1):
                 if repaired[y, x] == 0:
                     neighbors = []
                     for dy in [-1, 0, 1]:
@@ -181,8 +181,8 @@ class K3MSkeletonExtractor:
         distance = np.zeros_like(img, dtype=np.float32)
         for _ in range(ProjectConfig.K3M_ITER_STAGES):
             mask = np.zeros_like(img, dtype=bool)
-            for y in range(1, h‑1):
-                for x in range(1, w‑1):
+            for y in range(1, h-1):
+                for x in range(1, w-1):
                     if img[y, x] == 255:
                         code = self._get_neighborhood_code(img, x, y)
                         if self.lookup_table[code]:
@@ -233,7 +233,7 @@ def calculate_stroke_cv(binary_img: np.ndarray) -> Dict[str, Any]:
 def calculate_bezier_residual(binary_img: np.ndarray, num_control_points: int =None) -> Dict[str, Any]:
     """
     【申报书原版完整贝塞尔，返回均值残差、最大残差、有效笔画长度】
-    理论依据：AI‑SDT生成签名原生基于贝塞尔样条，拟合残差显著低于真人手写笔迹
+    理论依据：AI-SDT生成签名原生基于贝塞尔样条，拟合残差显著低于真人手写笔迹
     Args:
         binary_img:二值笔迹图像
         num_control_points:贝塞尔控制点数量，默认读取全局配置
@@ -257,8 +257,8 @@ def calculate_bezier_residual(binary_img: np.ndarray, num_control_points: int =N
             continue
         contour_length=0.0
         for i in range(1,len(coords)):
-            dx=coords[i,0]‑coords[i‑1,0]
-            dy=coords[i,1]‑coords[i‑1,1]
+            dx=coords[i,0]-coords[i-1,0]
+            dy=coords[i,1]-coords[i-1,1]
             contour_length+=math.hypot(dx,dy)
         if contour_length>=ProjectConfig.MIN_STROKE_LENGTH:
             valid_contours.append((coords,contour_length))
@@ -274,8 +274,8 @@ def calculate_bezier_residual(binary_img: np.ndarray, num_control_points: int =N
             u_new = np.linspace(0,1,len(coords))
             fitted_points = np.array(splev(u_new, tck)).T
             for i in range(len(coords)):
-                dx=coords[i,0]‑fitted_points[i,0]
-                dy=coords[i,1]‑fitted_points[i,1]
+                dx=coords[i,0]-fitted_points[i,0]
+                dy=coords[i,1]-fitted_points[i,1]
                 residual=math.hypot(dx,dy)
                 all_residuals.append(residual)
         except Exception as e:
@@ -295,7 +295,7 @@ def calculate_bezier_residual(binary_img: np.ndarray, num_control_points: int =N
 
 def douglas_peucker(points:np.ndarray, epsilon: Optional[float]=None) -> np.ndarray:
     """
-    道格拉斯‑普克关键点采样算法，提取笔迹骨架特征点
+    道格拉斯-普克关键点采样算法，提取笔迹骨架特征点
     Args:
         points:Nx2坐标点数组
         epsilon:压缩阈值，读取全局配置
@@ -307,12 +307,12 @@ def douglas_peucker(points:np.ndarray, epsilon: Optional[float]=None) -> np.ndar
     if len(points) <3:
         return points.copy()
     start_point = points[0]
-    end_point = points[‑1]
+    end_point = points[-1]
     max_dist=0.0
     max_idx=0
-    for i in range(1,len(points)‑1):
-        line_vec = end_point ‑ start_point
-        point_vec = points[i] ‑ start_point
+    for i in range(1,len(points)-1):
+        line_vec = end_point - start_point
+        point_vec = points[i] - start_point
         line_len = np.linalg.norm(line_vec)
         if line_len < ProjectConfig.EPS_FLOAT:
             dist = np.linalg.norm(point_vec)
@@ -320,14 +320,14 @@ def douglas_peucker(points:np.ndarray, epsilon: Optional[float]=None) -> np.ndar
             proj_len = np.dot(point_vec, line_vec)/line_len
             proj_len = np.clip(proj_len,0,line_len)
             proj_point = start_point + proj_len * line_vec / line_len
-            dist = np.linalg.norm(points[i]‑proj_point)
+            dist = np.linalg.norm(points[i]-proj_point)
         if dist>max_dist:
             max_dist=dist
             max_idx=i
     if max_dist>epsilon:
         left_points = douglas_peucker(points[:max_idx+1],epsilon)
         right_points = douglas_peucker(points[max_idx:],epsilon)
-        return np.vstack((left_points[:‑1], right_points))
+        return np.vstack((left_points[:-1], right_points))
     else:
         return np.array([start_point, end_point])
 
@@ -338,7 +338,7 @@ def calculate_speed_entropy(binary_img: np.ndarray, epsilon: Optional[float]=Non
     理论依据：静态骨架关键点，等效还原真人书写生理抖动；AI生成轨迹平滑熵偏大
     Args:
         binary_img:二值笔迹图像
-        epsilon:道格拉斯‑普克阈值
+        epsilon:道格拉斯-普克阈值
     Returns:
         speed_cv, feature_density, speed_mean, speed_std, entropy, valid_len
     """
@@ -368,7 +368,7 @@ def calculate_speed_entropy(binary_img: np.ndarray, epsilon: Optional[float]=Non
             continue
         contour_length=0.0
         for i in range(1,len(original_points)):
-            contour_length+=np.linalg.norm(original_points[i]‑original_points[i‑1])
+            contour_length+=np.linalg.norm(original_points[i]-original_points[i-1])
         if contour_length<ProjectConfig.MIN_STROKE_LENGTH:
             continue
         total_valid_length+=contour_length
@@ -378,7 +378,7 @@ def calculate_speed_entropy(binary_img: np.ndarray, epsilon: Optional[float]=Non
             continue
         all_feature_points.extend(feature_points.tolist())
         for i in range(1,len(feature_points)):
-            speed = np.linalg.norm(feature_points[i]‑feature_points[i‑1])
+            speed = np.linalg.norm(feature_points[i]-feature_points[i-1])
             if speed>ProjectConfig.EPS_FLOAT:
                 all_equivalent_speed.append(float(speed))
     if len(all_equivalent_speed)<ProjectConfig.MIN_SPEED_VALID_COUNT:
@@ -397,14 +397,14 @@ def calculate_speed_entropy(binary_img: np.ndarray, epsilon: Optional[float]=Non
     speed_cv = speed_std/speed_mean if abs(speed_mean) > ProjectConfig.EPS_FLOAT else 0.0
     acc_list:List[float]=[]
     for i in range(1,len(all_equivalent_speed)):
-        acc_list.append(abs(all_equivalent_speed[i]‑all_equivalent_speed[i‑1]))
+        acc_list.append(abs(all_equivalent_speed[i]-all_equivalent_speed[i-1]))
     acc_array=np.array(acc_list)
     entropy=0.0
     if len(acc_array)>0 and np.max(acc_array)>ProjectConfig.EPS_FLOAT:
         acc_norm = acc_array / np.max(acc_array)
         hist,_ = np.histogram(acc_norm,bins=10,density=True)
         hist = hist[hist>ProjectConfig.EPS_FLOAT]
-        entropy = ‑np.sum(hist * np.log2(hist)) / np.log2(len(hist))
+        entropy = -np.sum(hist * np.log2(hist)) / np.log2(len(hist))
     fd = len(all_feature_points)/len(all_original_points) if len(all_original_points)>0 else 0.0
     return {
         "speed_cv":round(speed_cv,4),
@@ -427,7 +427,7 @@ def weighted_model_detect(cv_stroke: float, bezier_mean: float, entropy_val: flo
         dict: score综合得分, result文本结果, is_ai标记True/False/None
     """
     w1,w2,w3,w4 = ProjectConfig.W1_STROKE, ProjectConfig.W2_BEZIER, ProjectConfig.W3_ENTROPY, ProjectConfig.W4_RESERVED
-    norm_cv = np.clip((cv_stroke ‑ 0.46)/(0.72‑0.46),0,1)
+    norm_cv = np.clip((cv_stroke - 0.46)/(0.72-0.46),0,1)
     norm_bezier = np.clip(bezier_mean /70.0,0,1)
     norm_entropy = np.clip((entropy_val +4.8)/(0.9),0,1)
     S = w1*norm_cv + w2*norm_bezier + w3*norm_entropy
@@ -524,7 +524,7 @@ def export_batch_csv(result_dict:Dict[str,Dict[str,Any]], out_csv_path:str):
         "speed_std等效速度标准差","entropy等效波动熵","speed_valid_len书写有效长度",
         "score_S综合得分","is_ai是否AI(None/True/False)","judge_text判别文字"
     ]
-    with open(out_csv_path,"w",encoding="utf‑8‑sig",newline="") as f:
+    with open(out_csv_path,"w",encoding="utf-8-sig",newline="") as f:
         writer = csv.DictWriter(f, fieldnames=headers)
         writer.writeheader()
         for fname,item in result_dict.items():
@@ -574,18 +574,18 @@ def run_cli_console():
 def generate_pdf_report(full_data:Dict[str,Any]) -> BytesIO:
     """PDF报告扩充：写入全套中间实验参数，增加项目元信息，对齐申报书附件输出；支持中文输出"""
     buf = BytesIO()
-    pdfmetrics.registerFont(UnicodeCIDFont('STSong‑Light'))
-    font_cn = 'STSong‑Light'
+    pdfmetrics.registerFont(UnicodeCIDFont('STSong-Light'))
+    font_cn = 'STSong-Light'
     c = canvas.Canvas(buf, pagesize=A4)
     width, height = A4
     c.setFont(font_cn,16)
-    c.drawCentredString(width/2, height‑45,"真迹云鉴 — AI伪造电子签名筛查实验报告")
+    c.drawCentredString(width/2, height-45,"真迹云鉴 — AI伪造电子签名筛查实验报告")
     c.setFont(font_cn,10)
-    c.drawString(40, height‑70,f"项目：{META['project_name']}")
-    c.drawString(40, height‑88,f"负责人：{META['leader']} ｜版本：{META['version']}")
-    c.drawString(40, height‑106,"⚠声明：本报告仅用于科研教学演示，不具备司法鉴定法律效力，不能作为司法证据。")
-    c.line(40,height‑122,width‑40,height‑122)
-    y = height‑145
+    c.drawString(40, height-70,f"项目：{META['project_name']}")
+    c.drawString(40, height-88,f"负责人：{META['leader']} ｜版本：{META['version']}")
+    c.drawString(40, height-106,"⚠声明：本报告仅用于科研教学演示，不具备司法鉴定法律效力，不能作为司法证据。")
+    c.line(40,height-122,width-40,height-122)
+    y = height-145
 
     c.setFont(font_cn,12)
     c.drawString(40,y,"=== 判别结论 ===")
@@ -613,7 +613,7 @@ def generate_pdf_report(full_data:Dict[str,Any]) -> BytesIO:
     c.drawString(40,y,"有效笔画总长度(像素)：%s"%full_data["bezier"]["total_len"])
     y -=30
 
-    c.drawString(40,y,"=== 书写速度等效波动熵模块（道格拉斯‑普克） ===")
+    c.drawString(40,y,"=== 书写速度等效波动熵模块（道格拉斯-普克） ===")
     y -=22
     c.drawString(40,y,"书写速度等效变异系数：%s"%full_data["speed"]["speed_cv"])
     y -=22
@@ -644,79 +644,79 @@ st.set_page_config(
 st.markdown("""
 <style>
 .main {
-    background‑color:#f3f7fb;
+    background-color:#f3f7fb;
 }
-.block‑container {
-    padding‑top:2rem;
-    padding‑bottom:3rem;
-    max‑width:1450px;
+.block-container {
+    padding-top:2rem;
+    padding-bottom:3rem;
+    max-width:1450px;
 }
-div[data‑testid="stVerticalBlockBorderWrapper"]{
-    border‑radius:12px !important;
-    box‑shadow: 0 2px 14px rgba(15, 50, 110, 0.12) !important;
+div[data-testid="stVerticalBlockBorderWrapper"]{
+    border-radius:12px !important;
+    box-shadow: 0 2px 14px rgba(15, 50, 110, 0.12) !important;
     border:1px solid #e2ebf6 !important;
 }
-.stTabs [data‑baseweb="tab‑list"] {
+.stTabs [data-baseweb="tab-list"] {
 	gap:8px;
 }
-.stTabs [data‑baseweb="tab"] {
+.stTabs [data-baseweb="tab"] {
     height:44px;
-    border‑radius:8px 8px 0 0;
+    border-radius:8px 8px 0 0;
 	padding:0px 20px;
-	font‑weight:500;
-	font‑size:1rem;
+	font-weight:500;
+	font-size:1rem;
 }
-.stTabs [aria‑selected="true"] {
-    background‑color:#164b96 !important;
+.stTabs [aria-selected="true"] {
+    background-color:#164b96 !important;
     color:#ffffff !important;
 }
 h1,h2,h3,h4 {
     color:#0f3460 !important;
 }
-div[data‑testid="stInfo"] {
-    border‑left:6px solid #2176d2 !important;
+div[data-testid="stInfo"] {
+    border-left:6px solid #2176d2 !important;
 }
-div[data‑testid="stSuccess"] {
-    border‑left:6px solid #00875a !important;
+div[data-testid="stSuccess"] {
+    border-left:6px solid #00875a !important;
 }
-div[data‑testid="stWarning"] {
-    border‑left:6px solid #ff8b00 !important;
+div[data-testid="stWarning"] {
+    border-left:6px solid #ff8b00 !important;
 }
-div[data‑testid="stError"] {
-    border‑left:6px solid #d92d20 !important;
+div[data-testid="stError"] {
+    border-left:6px solid #d92d20 !important;
 }
-[data‑testid="stFileUploader"]{
+[data-testid="stFileUploader"]{
     border:2px dashed #94b8e0;
-    border‑radius:10px;
+    border-radius:10px;
     padding:16px;
     background:#f8fbff;
 }
 hr {
-    border‑top:1px solid #c9d8ec !important;
+    border-top:1px solid #c9d8ec !important;
 }
-.footer‑note{
-    font‑size:0.85rem;
+.footer-note{
+    font-size:0.85rem;
     color:#546b8c;
-    text‑align:center;
-    margin‑top:40px;
+    text-align:center;
+    margin-top:40px;
 }
-.meta‑small{
-    font‑size:0.8rem;opacity:0.88;
+.meta-small{
+    font-size:0.8rem;opacity:0.88;
 }
 </style>
 """,unsafe_allow_html=True)
 
 # ==========【答辩投屏头部：项目申报书元信息，老师一眼看到项目信息】 ==========
 st.markdown(f"""
-<div style="background:linear‑gradient(90deg,#082248,#0f3b7c);padding:26px 30px;border‑radius:14px;color:#ffffff;margin‑bottom:26px;">
-<h2 style="color:#ffffff;margin:0;font‑weight:800;font‑size:1.9rem;letter‑spacing:0.7px;">✍️ 真迹云鉴 — AI伪造电子签名轻量化快筛系统</h2>
-<p class="meta‑small" style="margin:14px 0 4px 0;">
+<div style="background:linear-gradient(90deg,#082248,#0f3b7c);padding:26px 30px;border-radius:14px;color:#ffffff;margin-bottom:26px;">
+<h2 style="color:#ffffff;margin:0;font-weight:800;font-size:1.9rem;letter-spacing:0.7px;">✍️ 真迹云鉴 — AI伪造电子签名轻量化快筛系统</h2>
+<p class="meta-small" style="margin:14px 0 4px 0;">
 项目全称：{META['project_name']}
 <br/>
 负责人：{META['leader']} &nbsp;|&nbsp;指导教师：{META['tutor']} &nbsp;|&nbsp;项目周期：{META['period']} &nbsp;|&nbsp;版本：{META['version']}
 </p>
-<p style="opacity:0.9;font‑size:0.92rem;margin‑top:12px;">
-<span style="background:#ffffff;color:#0f3b7c;padding:5px 12px;border‑radius:18px;font‑size:0.86rem;">大创中期答辩 · 科研教学原型演示</span>
+<p style="opacity:0.9;font-size:0.92rem;margin-top:12px;">
+<span style="background:#ffffff;color:#0f3b7c;padding:5px 12px;border-radius:18px;font-size:0.86rem;">大创中期答辩 · 科研教学原型演示</span>
 &nbsp;&nbsp;<span style="color:#ffdd99;">{META['disclaimer']}</span>
 </p>
 </div>
@@ -733,13 +733,13 @@ with tab_detect:
     with col_info:
         feature_weight_html = """
 **多特征加权模型权重分配（申报书标定）：**
-<span style='background:#164b96;color:white;padding:3px 9px;border‑radius:8px;font‑size:0.82rem;'>笔画粗细变异系数 20%</span>
-<span style='background:#164b96;color:white;padding:3px 9px;border‑radius:8px;font‑size:0.82rem;'>贝塞尔曲线拟合残差 25%</span>
-<span style='background:#164b96;color:white;padding:3px 9px;border‑radius:8px;font‑size:0.82rem;'>书写速度等效波动熵 35%</span>
-<span style='background:#4468a8;color:white;padding:3px 9px;border‑radius:8px;font‑size:0.82rem;'>异常部件发生率 20%【中期预留接口，待开发】</span>
+<span style='background:#164b96;color:white;padding:3px 9px;border-radius:8px;font-size:0.82rem;'>笔画粗细变异系数 20%</span>
+<span style='background:#164b96;color:white;padding:3px 9px;border-radius:8px;font-size:0.82rem;'>贝塞尔曲线拟合残差 25%</span>
+<span style='background:#164b96;color:white;padding:3px 9px;border-radius:8px;font-size:0.82rem;'>书写速度等效波动熵 35%</span>
+<span style='background:#4468a8;color:white;padding:3px 9px;border-radius:8px;font-size:0.82rem;'>异常部件发生率 20%【中期预留接口，待开发】</span>
 
 > 判别阈值标定来源：自建**双源笔迹数据库**，AI样本 n=153，真人手写样本 n=20。
-> 阈值：S＜0.42 疑似AI；S＞0.62疑似真人；0.42‑0.62为灰色过渡区间，强制人工复核。
+> 阈值：S＜0.42 疑似AI；S＞0.62疑似真人；0.42-0.62为灰色过渡区间，强制人工复核。
 """
         st.markdown(feature_weight_html, unsafe_allow_html=True)
         st.info("💡答辩演示建议：准备两组样本，一组SDT模型生成AI伪造签名，一组真人手写签名，上传对比全套量化指标差异。")
@@ -759,7 +759,7 @@ with tab_detect:
                 st.error(f"图片尺寸过小({w_img}×{h_img})，无法完成特征提取，请上传分辨率更大的签名图片。")
                 st.stop()
 
-            with st.spinner("🔍算法流水线运行：图像二值化｜K3M七阶段骨架提取｜贝塞尔样条拟合｜道格拉斯‑普克特征点采样｜等效波动熵计算｜多特征加权判别……"):
+            with st.spinner("🔍算法流水线运行：图像二值化｜K3M七阶段骨架提取｜贝塞尔样条拟合｜道格拉斯-普克特征点采样｜等效波动熵计算｜多特征加权判别……"):
                 pipeline_result = single_image_full_pipeline(img_gray)
                 stroke_result = pipeline_result["stroke"]
                 bezier_result = pipeline_result["bezier"]
@@ -819,7 +819,7 @@ with tab_detect:
                     sr = stroke_result
                     st.markdown(f"""
 - **笔画粗细变异系数：`{sr['stroke_cv']}`**
-    > 数据库统计参考区间：AI：0.46‑0.54｜真人：0.54‑0.72
+    > 数据库统计参考区间：AI：0.46-0.54｜真人：0.54-0.72
 - **笔画平均宽度(像素)：`{sr['mean_width']}`**
 - **笔画宽度标准差(像素)：`{sr['std_width']}`**
 - **骨架有效笔迹像素：`{sr['valid_stroke_pixel']}`**
@@ -835,7 +835,7 @@ with tab_detect:
 - **有效笔画总长度(像素)：`{br['total_len']}`**
 - **有效轮廓数量：`{br['contour_count']}`**
 
-> **算法原理**：SDT‑AI伪造签名原生由贝塞尔样条生成，与笔迹轮廓拟合残差显著低于真人手写的生理抖动笔迹。
+> **算法原理**：SDT-AI伪造签名原生由贝塞尔样条生成，与笔迹轮廓拟合残差显著低于真人手写的生理抖动笔迹。
 """)
                 with tab_speed:
                     sp = speed_result
@@ -845,10 +845,10 @@ with tab_detect:
 - **等效速度均值(像素)：`{sp['speed_mean']}`**
 - **等效速度标准差(像素)：`{sp['speed_std']}`**
 - **书写速度等效波动熵：`{sp['entropy']}`**
-    > 数据库统计参考区间：AI参考：‑3.8 ~ ‑2.6｜真人参考：‑4.8 ~ ‑3.9
+    > 数据库统计参考区间：AI参考：-3.8 ~ -2.6｜真人参考：-4.8 ~ -3.9
 - **有效笔画总长度(像素)：`{sp['valid_len']}`**
 
-> **算法原理**：道格拉斯‑普克关键点采样，仅依靠静态图片等效还原运笔节奏；真人受手部生理抖动，熵数值更低；AI生成轨迹过度平滑熵偏高。
+> **算法原理**：道格拉斯-普克关键点采样，仅依靠静态图片等效还原运笔节奏；真人受手部生理抖动，熵数值更低；AI生成轨迹过度平滑熵偏高。
 """)
 
             st.divider()
@@ -857,7 +857,7 @@ with tab_detect:
                 st.markdown("""
 1. 样本特征趋势：笔画粗细变异系数偏低，贝塞尔残差偏小，波动熵偏大，S＜0.42，高度倾向AI伪造签名；
 2. 样本特征趋势：笔画粗细变异系数偏高，贝塞尔残差大，波动熵偏小，S＞0.62，高度倾向真人手写签名；
-3. **0.42‑0.62灰色过渡区间**：图片分辨率、扫描压缩、签名大小、光照、笔迹残缺均会落入该区间，**必须人工复核，不能机器直接下定论**；
+3. **0.42-0.62灰色过渡区间**：图片分辨率、扫描压缩、签名大小、光照、笔迹残缺均会落入该区间，**必须人工复核，不能机器直接下定论**；
 4. 原型局限性：中期版本尚未完成「异常部件发生率」模块；训练样本规模有限，对特殊书写风格样本泛化能力存在约束；
 5. ⚠本系统定位为**科研教学初筛辅助原型，不可替代司法鉴定，不能用于正式法律案件**。
 """)
@@ -869,8 +869,8 @@ with tab_detect:
                 st.subheader("📈核心判别指标雷达可视化图表（叠加数据库样本均值参考线）")
                 categories = ["笔画粗细变异系数","贝塞尔平均残差","书写等效波动熵"]
                 values = [stroke_result["stroke_cv"], bezier_result["mean_res"], speed_result["entropy"]]
-                ai_ref = [0.5302,25.73,‑2.9651]
-                human_ref = [0.5627,70.59,‑3.8227]
+                ai_ref = [0.5302,25.73,-2.9651]
+                human_ref = [0.5627,70.59,-3.8227]
                 fig_radar = go.Figure()
                 fig_radar.add_trace(go.Scatterpolar(r=values, theta=categories, fill="toself",name="本次检测样本",opacity=0.75))
                 fig_radar.add_trace(go.Scatterpolar(r=ai_ref, theta=categories, name="AI样本数据库均值",line_dash="dash"))
@@ -949,7 +949,7 @@ with tab_teach:
             st.subheader("行业痛点分析")
             st.markdown("""
 #### 当前三大现实痛点
-1. **传统司法鉴定成本高、周期长**：单次笔迹鉴定收费约3300元，周期3‑7个工作日，高频批量筛查场景成本不可接受；
+1. **传统司法鉴定成本高、周期长**：单次笔迹鉴定收费约3300元，周期3-7个工作日，高频批量筛查场景成本不可接受；
 2. **基层业务“三无困境”**：大量现实业务场景**无动态书写轨迹、无比对样本档案、无专业采集硬件**；现有笔迹鉴别方案高度依赖手写板动态时序数据；
 3. **产品供给缺位**：市面笔迹鉴别产品大多用于区分不同书写人，**缺少专门针对AI生成伪造签名的轻量化筛查产品**。
 
@@ -972,9 +972,9 @@ with tab_teach:
             with tech_tab1:
                 st.markdown("""
 ### 双源笔迹数据库构建
-1. 硬件：Wacom CTL‑672电磁手写板，采集18‑28岁本科人群真人签名，同步保存图像+原始书写动态轨迹；
+1. 硬件：Wacom CTL-672电磁手写板，采集18-28岁本科人群真人签名，同步保存图像+原始书写动态轨迹；
 2. AI样本：SDT手写生成模型，基于真人笔迹风格批量生成高仿真AI伪造签名；
-3. 样本筛选：选取国内高频姓名共153个对象，构建真人‑AI成对双源笔迹数据集；
+3. 样本筛选：选取国内高频姓名共153个对象，构建真人-AI成对双源笔迹数据集；
 4. 可扩展：预留扩容接口，后续扩充不同年龄、性别、书写风格样本用于模型迭代。
 
 > 当前数据集规模：AI伪造样本 n=153；真人手写样本 n=20。
@@ -1002,10 +1002,10 @@ AI生成签名笔画生成机制规整，变异系数统计上偏低。
 
 #### ②贝塞尔曲线拟合残差（权重25%）
 8控制点贝塞尔样条对笔画轮廓拟合；输出平均残差、最大残差、有效笔画长度；
-SDT‑AI签名原生基于贝塞尔生成，拟合残差显著低于真人手写。
+SDT-AI签名原生基于贝塞尔生成，拟合残差显著低于真人手写。
 
 #### ③书写速度等效波动熵（权重35%，权重最高）
-**不依赖手写板动态时序！** 道格拉斯‑普克算法提取骨架关键特征点；
+**不依赖手写板动态时序！** 道格拉斯-普克算法提取骨架关键特征点；
 输出等效速度变异系数、特征点密度、等效速度均值/标准差、波动熵；
 真人存在手部生理抖动，运笔节奏波动大，熵数值更低；AI生成轨迹过度平滑熵偏大。
 
@@ -1035,8 +1035,8 @@ $X_4$：异常部件发生率（中期预留，置0）
         with box4:
             st.subheader("📊项目实验统计可视化图表（来自自建双源笔迹数据库）")
             exp_labels = ["笔画粗细变异系数","贝塞尔平均残差(px)","书写等效波动熵"]
-            ai_group_data = [0.5302,25.73,‑2.9651]
-            human_group_data = [0.5627,70.59,‑3.8227]
+            ai_group_data = [0.5302,25.73,-2.9651]
+            human_group_data = [0.5627,70.59,-3.8227]
             fig_bar = go.Figure()
             fig_bar.add_trace(go.Bar(x=exp_labels,y=ai_group_data,name="AI伪造签名（实验均值）",marker_color="#2b5797"))
             fig_bar.add_trace(go.Bar(x=exp_labels,y=human_group_data,name="真人手写签名（实验均值）",marker_color="#c82423"))
@@ -1089,7 +1089,7 @@ $X_4$：异常部件发生率（中期预留，置0）
 7. 开展100份用户问卷调研，完成市场痛点分析；公众号科普推文7篇；
 8. 完成中期汇报全套演示材料，可投屏直接用于答辩课堂教学。
 
-#### ⏳【后期待完成任务（2026.04‑2027.03）】
+#### ⏳【后期待完成任务（2026.04-2027.03）】
 1. 开发「异常部件发生率」特征模块，完善加权模型X_4分量；
 2. 扩充笔迹数据库样本规模，扩充不同年龄、性别、书写风格样本；
 3. 优化算法鲁棒性：对模糊、倾斜、裁剪、低质量图片做预处理增强；
@@ -1123,8 +1123,8 @@ $X_4$：异常部件发生率（中期预留，置0）
 
 # 页脚
 st.markdown("""
-<div class="footer‑note">
-©2026 北京市大学生创新训练项目｜真迹云鉴｜中期答辩演示系统 V2.2‑MID‑DEFENSE<br>
+<div class="footer-note">
+©2026 北京市大学生创新训练项目｜真迹云鉴｜中期答辩演示系统 V2.2-MID-DEFENSE<br>
 本系统仅供科研教学演示，不具备司法鉴定法律效力
 </div>
 """,unsafe_allow_html=True)
