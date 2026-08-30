@@ -510,7 +510,7 @@ def export_batch_csv(result_dict:Dict[str,Dict[str,Any]], out_csv_path:str):
 def run_cli_console():
     """本地命令行交互控制台，用于科研批量实验"""
     print("="*75)
-    print("📝真迹云鉴｜底层算法控制台｜申报书附件工程版本")
+    print("📝真迹云鉴｜底层算法控制台")
     print("1:单张图片完整分析 | 2:文件夹批量分析导出CSV | q:退出")
     print("="*75)
     while True:
@@ -1041,7 +1041,7 @@ $X_4$：异常部件发生率（预留）
 # 页脚
 st.markdown("""
 <div class="footer-note">
-©2026 北京市大学生创新训练项目｜真迹云鉴｜中期答辩演示系统 V2.1<br>
+©2026 北京市大学生创新训练项目｜真迹云鉴｜V8.1<br>
 本系统仅供科研教学演示，不具备司法鉴定法律效力
 </div>
 """,unsafe_allow_html=True)
