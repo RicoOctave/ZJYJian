@@ -37,39 +37,39 @@ META = {
 class ProjectConfig:
     """项目全局常量配置类，所有阈值、权重、超参统一在此维护，便于论文调参、复现实验；参数全部来自申报书实验标定结果"""
     # 加权模型权重 申报书：W1=0.20 W2=0.25 W3=0.35 W4=0.20（异常部件发生率中期预留未实现）
-    W1_STROKE: float = 0.20
-    W2_BEZIER: float = 0.25
-    W3_ENTROPY: float = 0.35
-    W4_RESERVED: float = 0.20
+    W1_STROKE = 0.20
+    W2_BEZIER = 0.25
+    W3_ENTROPY = 0.35
+    W4_RESERVED = 0.20
 
     # 判别阈值 基于自建双源笔迹数据库173份样本统计标定
-    AI_THRESHOLD: float = 0.42
-    HUMAN_THRESHOLD: float = 0.62
+    AI_THRESHOLD = 0.42
+    HUMAN_THRESHOLD = 0.62
 
     # 算法超参
-    K3M_ITER_STAGES: int = 7
-    DOUGLAS_EPSILON: float = 1.5
-    BEZIER_CONTROL_POINTS: int = 8
-    MIN_STROKE_LENGTH: float = 20.0
-    MIN_SPEED_VALID_COUNT: int = 2
-    DIST_TRANSFORM_KERNEL: int = 3
+    K3M_ITER_STAGES = 7
+    DOUGLAS_EPSILON = 1.5
+    BEZIER_CONTROL_POINTS = 8
+    MIN_STROKE_LENGTH = 20.0
+    MIN_SPEED_VALID_COUNT = 2
+    DIST_TRANSFORM_KERNEL = 3
 
     # 形态学预处理
-    MORPH_RECT_W: int = 2
-    MORPH_RECT_H: int = 2
+    MORPH_RECT_W = 2
+    MORPH_RECT_H = 2
 
     # 数值安全下限
-    EPS_FLOAT: float = 1e‑6
+    EPS_FLOAT = 1e-6
 
     # 图像约束：上传图片最小像素
-    MIN_IMG_W: int = 120
-    MIN_IMG_H: int = 120
+    MIN_IMG_W = 120
+    MIN_IMG_H = 120
 
 # 日志配置，工程级日志输出，区分INFO/WARNING/ERROR；云端部署可在控制台查看运行日志
 logging.basicConfig(
     level=logging.INFO,
     format="[%(asctime)s] [%(levelname)s] %(message)s",
-    datefmt="%Y‑%m‑%d %H:%M:%S",
+    datefmt="%Y-%m-%d %H:%M:%S",
     stream=sys.stdout
 )
 logger = logging.getLogger(__name__)
