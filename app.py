@@ -675,26 +675,14 @@ hr {
 
 # ==========页面头部大标题区域==========
 st.markdown("""
-<div style="background:linear-gradient(90deg,#082248,#0f3b7c);padding:24px 28px;border-radius:12px;margin-bottom:24px;">
-<h2 style="color:#ffffff !important;
-background:none !important;
-fill:#ffffff !important;
-margin:0;
-font-weight:900;
-font-size:1.9rem;
-letter-spacing:0.8px;
-text-shadow: 1px 1px 2px #000000, 2px 2px 6px rgba(0,0,0,0.85);
--webkit-text-fill-color:#ffffff !important;
--webkit-text-stroke:0.4px rgba(0,0,0,0.4);">✍️ 真迹云鉴 — AI伪造电子签名轻量化快筛系统</h2>
-
-<p style="color:#ffffff !important;opacity:0.95;margin:12px 0 0 0;font-size:1.1rem;">
-北京市级大学生创新训练项目｜V8.1 
+<div style="background:linear-gradient(90deg,#082248,#0f3b7c);padding:24px 28px;border-radius:12px;color:#ffffff;margin-bottom:24px;">
+<h2 style="color:#FFFFFF !important;margin:0;font-weight:900;font-size:1.9rem;letter-spacing:0.8px;text-shadow:0px 1px 0px #000000, 0px 2px 4px rgba(0,0,0,0.9);-webkit-text-stroke:0.3px rgba(0,0,0,0.3);">✍️ 真迹云鉴 — AI伪造电子签名轻量化快筛系统</h2>
+<p style="opacity:0.95;margin:12px 0 0 0;color:#ffffff;">北京市级大学生创新训练项目｜V8.1 
 &nbsp;&nbsp;
-<span style="background:#ffffff;color:#0f3b7c;padding:5px 12px;border-radius:20px;font-size:0.9rem;font-weight:bold;">科研教学演示版本</span>
+<span style="background:#ffffff;color:#0f3b7c;padding:4px 10px;border-radius:16px;font-size:0.85rem;">科研教学演示版本</span>
 </p>
-
-<p style="color:#ffffff !important;opacity:0.9;font-size:0.95rem;margin:8px 0 0 0;">⚠本系统仅用于高校科研、课堂实训演示，不具备司法鉴定法律效力</p>
-<p style="color:#ffffff !important;opacity:0.78;font-size:0.85rem;margin:10px 0 0 0;">产品所属主体：真迹云鉴（佛山市）科技有限公司</p>
+<p style="opacity:0.9;font-size:0.9rem;margin:6px 0 0 0;color:#ffffff;">⚠本系统仅用于高校科研、课堂实训演示，不具备司法鉴定法律效力</p>
+<p style="opacity:0.75;font-size:0.82rem;margin:10px 0 0 0;color:#ffffff;">产品所属主体：真迹云鉴（佛山市）科技有限公司</p>
 </div>
 """, unsafe_allow_html=True)
 
