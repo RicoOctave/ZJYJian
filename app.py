@@ -676,7 +676,9 @@ hr {
 # ==========页面头部大标题区域==========
 st.markdown("""
 <div style="background:linear-gradient(90deg,#082248,#0f3b7c);padding:24px 28px;border-radius:12px;color:#ffffff;margin-bottom:24px;">
-<h2 style="color:#ffffff !important;margin:0;font-weight:900;font-size:1.9rem;letter-spacing:0.8px;text-shadow:0px 3px 3px #000000, 0px 5px 10px rgba(0,0,0,0.98);">✍️ 真迹云鉴 — AI伪造电子签名轻量化快筛系统</h2>
+<div style="background:#000000;padding:12px 24px;border-radius:8px;display:inline-block;">
+<h2 style="color:#ffffff !important;margin:0;font-weight:900;font-size:1.9rem;letter-spacing:0.8px;text-shadow:none;">✍️ 真迹云鉴 — AI伪造电子签名轻量化快筛系统</h2>
+</div>
 <p style="opacity:0.95;margin:12px 0 0 0;color:#ffffff;">北京市级大学生创新训练项目｜V8.1 
 &nbsp;&nbsp;
 <span style="background:#ffffff;color:#0f3b7c;padding:4px 10px;border-radius:16px;font-size:0.85rem;">科研教学演示版本</span>
