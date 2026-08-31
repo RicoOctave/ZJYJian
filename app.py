@@ -677,11 +677,13 @@ hr {
 st.markdown("""
 <div style="background:linear-gradient(90deg,#082248,#0f3b7c);padding:30px 28px;border-radius:14px;margin-bottom:24px;">
 
-<div style="display:inline-block;background:#ffffff;color:#0f3b7c;padding:10px 22px;border-radius:30px;font-weight:900;font-size:1.35rem;letter-spacing:0.5rem;box-shadow:0px 4px 14px rgba(0,0,0,0.35);">
+<!-- 主标题：白色圆角胶囊 -->
+<div style="display:inline-block;background:#ffffff;color:#0f3b7c;padding:12px 26px;border-radius:999px;font-weight:900;font-size:1.6rem;box-shadow:0 6px 16px rgba(0,0,0,0.25);">
 ✍️ 真迹云鉴 — AI伪造电子签名轻量化快筛系统
 </div>
 
-<p style="color:#ffffff !important;opacity:0.95;margin:14px 0 0 0;font-size:1.1rem;">
+<!-- 下面内容全部恢复白色，原有排版不变 -->
+<p style="color:#ffffff !important;opacity:0.95;margin:16px 0 0 0;font-size:1.1rem;">
 北京市级大学生创新训练项目｜V8.1 
 &nbsp;&nbsp;
 <span style="background:#ffffff;color:#0f3b7c;padding:5px 12px;border-radius:20px;font-size:0.9rem;font-weight:bold;">科研教学演示版本</span>
@@ -691,7 +693,6 @@ st.markdown("""
 <p style="color:#ffffff !important;opacity:0.78;font-size:0.85rem;margin:10px 0 0 0;">产品所属主体：真迹云鉴（佛山市）科技有限公司</p>
 </div>
 """, unsafe_allow_html=True)
-
 
 tab_detect, tab_teach = st.tabs(["🧪 签名检测模块（实操检测）","📖 高校教学教具演示模块（课堂教学）"])
 
