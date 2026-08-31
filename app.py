@@ -673,10 +673,10 @@ hr {
 </style>
 """,unsafe_allow_html=True)
 
-# ==========页面头部大标题区域（修复文字看不清，增加公司主体） ==========
+# ==========页面头部大标题区域==========
 st.markdown("""
 <div style="background:linear-gradient(90deg,#082248,#0f3b7c);padding:24px 28px;border-radius:12px;color:#ffffff;margin-bottom:24px;">
-<h2 style="color:#FFFFFF !important;margin:0;font-weight:800;font-size:1.8rem;text-shadow:0px 2px 10px rgba(0,0,0,0.7);letter-spacing:0.6px;">✍️ 真迹云鉴 — AI伪造电子签名轻量化快筛系统</h2>
+<h2 style="color:#FFFFFF !important;margin:0;font-weight:900;font-size:1.9rem;letter-spacing:0.8px;text-shadow:0px 1px 0px #000000, 0px 2px 4px rgba(0,0,0,0.9);-webkit-text-stroke:0.3px rgba(0,0,0,0.3);">✍️ 真迹云鉴 — AI伪造电子签名轻量化快筛系统</h2>
 <p style="opacity:0.95;margin:12px 0 0 0;color:#ffffff;">北京市级大学生创新训练项目｜V8.1 
 &nbsp;&nbsp;
 <span style="background:#ffffff;color:#0f3b7c;padding:4px 10px;border-radius:16px;font-size:0.85rem;">科研教学演示版本</span>
